@@ -10,6 +10,7 @@
 .inp{width:100%;padding:14px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:16px;font-family:'Outfit',sans-serif;outline:none}.inp:focus{border-color:var(--ac)}.inp-code{text-align:center;font-size:28px;letter-spacing:6px;font-weight:800}
 .gap{height:14px}.btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s}
 .btn-p{background:linear-gradient(135deg,var(--ac),#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.25)}.btn-p:hover{transform:translateY(-1px)}.btn-p:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-pu{background:linear-gradient(135deg,var(--pu),#7c3aed);color:#fff;box-shadow:0 4px 16px rgba(167,139,250,.25)}.btn-pu:hover{transform:translateY(-1px)}
 .err{color:var(--rd);font-size:13px;text-align:center;margin-top:8px}
 .topic{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(20,184,166,.15);color:var(--tl);border:1px solid rgba(20,184,166,.2);margin-bottom:8px}
 .qnum{color:var(--al);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
@@ -18,8 +19,6 @@
 .opt:hover:not(:disabled){border-color:var(--ac);transform:translateY(-1px)}.opt:disabled{cursor:default;transform:none}.opt.sel{border-width:2px}
 .badge{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
 .ok{color:var(--gn);font-size:13px;text-align:center;margin-top:12px}
-.ins-l{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--sf);border:1px solid var(--bd)}
-.ins-r{margin-top:14px;padding:14px;border-radius:10px;background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(14,165,233,.06));border:1px solid rgba(167,139,250,.25)}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:16px}.dot{height:8px;border-radius:4px;transition:all .3s}
 .presenter{color:var(--dm);font-size:11px;text-align:center;margin-top:6px}
 .sts{text-align:center;margin-top:16px;padding:12px;border-radius:10px;font-size:13px}
@@ -27,15 +26,17 @@
 .sts-err{background:rgba(244,63,94,.1);color:var(--rd);border:1px solid rgba(244,63,94,.25)}
 .sts-wait{background:var(--sf);color:var(--al);border:1px solid var(--bd)}
 .vcode{background:var(--sf);border-radius:10px;padding:14px;font-family:monospace;font-size:15px;color:var(--al);margin:8px 0 16px;border:1px solid var(--bd);text-align:center;letter-spacing:2px;font-weight:600}
+.code-gate{text-align:center;padding:20px 0}
+.code-gate p{color:var(--mt);font-size:13px;margin-bottom:12px}
 </style></head><body><div class="wrap" id="app"></div>
 <script>
 var _a="J6IoAbezSNDLPN4SsUqKfOGFISdIAM";var _b="RjcbXAlAmblkVIUi0TZohta9iv8Ub_";var _c="O5dMvhFjamPM0QL2IAMB11_tap_buhtig";
 var _k=(_a+_b+_c).split("").reverse().join("");
 var GH_REPO="jysdtd/TeradataPollingCentral";
 var COLORS=["#0ea5e9","#10b981","#f59e0b","#f43f5e","#8b5cf6","#ec4899"];
-var D={"code": "A4Z5YX", "slug": "wnh8u4kx", "title": "ANZ Teradata Guild Education Session - Enterprise Vector Store (Check Understanding)", "presenter": "Geetu Mehta", "questions": [{"idx": 0, "text": "What is a \"vector embedding\" in simple business terms?", "subtitle": "Simple Business Term", "topic": "Under the Hood", "insight": "Answer: B) Think of an embedding as a fingerprint for meaning. \"Quarterly revenue target\" and \"Q3 sales goal\" get almost identical fingerprints, so your AI connects them instantly, even without keyword overlap.", "options": [{"idx": 0, "text": "A graph showing data trends"}, {"idx": 1, "text": "A number fingerprint that captures meaning"}, {"idx": 2, "text": "A type of encrypted file"}, {"idx": 3, "text": "A data warehouse connector"}]}, {"idx": 1, "text": "Which of these challenges is your team facing RIGHT NOW? (Pick the biggest one)", "subtitle": "Closing Question", "topic": "Current State", "insight": "All four are vector store problems. A well built knowledge layer with semantic search directly addresses hallucinations, silos, tribal knowledge loss, and response quality, all at once.", "options": [{"idx": 0, "text": "AI answers that miss context or hallucinate"}, {"idx": 1, "text": "Siloed data that's hard to query"}, {"idx": 2, "text": "Slow onboarding: knowledge lives in people's heads"}, {"idx": 3, "text": "Customers not getting fast, accurate answers"}]}, {"idx": 2, "text": "If your AI could instantly surface the right answer from every document, email, and policy in your org, what's the most valuable outcome for your team?", "subtitle": "Value Sizing", "topic": "ROI Lens", "insight": "Companies using semantic search report 40 to 60% faster information retrieval and measurable drops in escalation rates. The business case writes itself, once you've seen it in action.", "options": [{"idx": 0, "text": "Faster customer response times"}, {"idx": 1, "text": "Reduced onboarding & training cost"}, {"idx": 2, "text": "Higher accuracy in AI generated outputs"}, {"idx": 3, "text": "Less reliance on senior staff for routine questions"}]}, {"idx": 3, "text": "Where does your organisation sit on the vector store journey?", "subtitle": "Readiness Check", "topic": "Next Step", "insight": "Wherever you are, there's a faster path forward. Most teams jump straight to building without scoping the right architecture. A short workshop can save months of rework.", "options": [{"idx": 0, "text": "We haven't started: exploring options"}, {"idx": 1, "text": "We've tried basic RAG but hit limits"}, {"idx": 2, "text": "We have a solution but it's underperforming"}, {"idx": 3, "text": "We're scaling, looking to optimise"}]}]};
-var voted={};var currentQ=0;var userName="Anonymous";
-var pid=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+var D={"code": "A4Z5YX", "slug": "wnh8u4kx", "paced": false, "questionCodes": null, "title": "ANZ Teradata Guild Education Session - Enterprise Vector Store (Check Understanding)", "presenter": "Geetu Mehta", "questions": [{"idx": 0, "text": "What is a \"vector embedding\" in simple business terms?", "subtitle": "Simple Business Term", "topic": "Under the Hood", "insight": "", "options": [{"idx": 0, "text": "A graph showing data trends"}, {"idx": 1, "text": "A number fingerprint that captures meaning"}, {"idx": 2, "text": "A type of encrypted file"}, {"idx": 3, "text": "A data warehouse connector"}]}, {"idx": 1, "text": "Which of these challenges is your team facing RIGHT NOW? (Pick the biggest one)", "subtitle": "Closing Question", "topic": "Current State", "insight": "", "options": [{"idx": 0, "text": "AI answers that miss context or hallucinate"}, {"idx": 1, "text": "Siloed data that's hard to query"}, {"idx": 2, "text": "Slow onboarding: knowledge lives in people's heads"}, {"idx": 3, "text": "Customers not getting fast, accurate answers"}]}, {"idx": 2, "text": "If your AI could instantly surface the right answer from every document, email, and policy in your org, what's the most valuable outcome for your team?", "subtitle": "Value Sizing", "topic": "ROI Lens", "insight": "", "options": [{"idx": 0, "text": "Faster customer response times"}, {"idx": 1, "text": "Reduced onboarding & training cost"}, {"idx": 2, "text": "Higher accuracy in AI generated outputs"}, {"idx": 3, "text": "Less reliance on senior staff for routine questions"}]}, {"idx": 3, "text": "Where does your organisation sit on the vector store journey?", "subtitle": "Readiness Check", "topic": "Next Step", "insight": "", "options": [{"idx": 0, "text": "We haven't started: exploring options"}, {"idx": 1, "text": "We've tried basic RAG but hit limits"}, {"idx": 2, "text": "We have a solution but it's underperforming"}, {"idx": 3, "text": "We're scaling, looking to optimise"}]}]};
+var voted={};var currentQ=0;var userName="Anonymous";var waitingForCode=false;
+var pid=Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);
 function submitToGitHub(voteData){
   var path="votes/"+D.slug+"/"+pid+".json";
   var content=btoa(unescape(encodeURIComponent(JSON.stringify(voteData,null,2))));
@@ -56,10 +57,13 @@ function joinSession(){
   var c=document.getElementById("inp-code"),n=document.getElementById("inp-name");if(!c)return;
   var code=c.value.trim().toUpperCase();userName=n?n.value.trim()||"Anonymous":"Anonymous";
   if(code.length<4){showJoin("Please enter a valid session code.");return}
-  if(code!==D.code){showJoin("Invalid session code. Please check and try again.");return}renderQ();
+  if(code!==D.code){showJoin("Invalid session code. Please check and try again.");return}
+  renderQ();
 }
 function renderQ(){
   var allDone=Object.keys(voted).length===D.questions.length;if(allDone){showSubmitting();return}
+  // Paced: if waiting for next question code, show code gate
+  if(waitingForCode){showCodeGate();return}
   var q=D.questions[currentQ];if(!q)return;var hv=voted[currentQ]!==undefined;
   var h='<div class="hdr"><h1>Live<span>Poll</span></h1><p>'+D.title+'</p>';
   if(D.presenter)h+='<div class="presenter">Hosted by '+D.presenter+'</div>';
@@ -69,17 +73,52 @@ function renderQ(){
   q.options.forEach(function(o,i){var sel=voted[currentQ]===i;var cl=COLORS[i%COLORS.length];
     h+='<button class="opt'+(sel?' sel':'')+'" onclick="doVote('+i+')" '+(hv?'disabled':'')+' style="'+(sel?'border-color:'+cl+';background:'+cl+'12':'')+'">';
     h+='<span class="badge" style="background:'+(sel?cl:'var(--cd)')+';color:'+(sel?'#fff':'var(--mt)')+'">'+String.fromCharCode(65+i)+'</span><span>'+o.text+'</span></button>';});
-  if(hv){h+='<div class="ok">\u2713 Vote recorded</div>';
-    if(q.insight){h+='<div class="ins-r"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:16px">\uD83D\uDCA1</span><span style="color:var(--pu);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Insight</span></div><p style="font-size:13px;line-height:1.6;white-space:pre-wrap">'+q.insight+'</p></div>';}
+  if(hv){
+    h+='<div class="ok">\u2713 Vote recorded</div>';
     var allNow=Object.keys(voted).length===D.questions.length;
-    h+='<button class="btn btn-p" onclick="'+(allNow?'showSubmitting()':'nextQ()')+'" style="margin-top:16px">'+(allNow?'Submit Votes \u2192':'Next Question \u2192')+'</button>';
-  }else if(q.insight){h+='<div class="ins-l"><div style="display:flex;align-items:center;gap:8px"><span>\uD83D\uDD12</span><span style="color:var(--dm);font-size:12px;font-style:italic">Insight revealed after voting</span></div></div>';}
+    if(allNow){
+      h+='<button class="btn btn-p" onclick="showSubmitting()" style="margin-top:16px">Submit Votes \u2192</button>';
+    }else if(D.paced){
+      h+='<button class="btn btn-pu" onclick="requestNextCode()" style="margin-top:16px">\uD83C\uDFAF Enter Code for Next Question \u2192</button>';
+    }else{
+      h+='<button class="btn btn-p" onclick="nextQ()" style="margin-top:16px">Next Question \u2192</button>';
+    }
+  }
   h+='</div><div class="dots">';D.questions.forEach(function(_,i){var done=voted[i]!==undefined;var active=i===currentQ;
     h+='<div class="dot" style="width:'+(active?'24px':'8px')+';background:'+(done?'var(--gn)':active?'var(--ac)':'var(--bd)')+'"></div>';});h+='</div>';
   document.getElementById("app").innerHTML=h;
 }
 function doVote(i){if(voted[currentQ]!==undefined)return;voted[currentQ]=i;renderQ()}
-function nextQ(){if(currentQ<D.questions.length-1){currentQ++;renderQ()}}
+function nextQ(){if(currentQ<D.questions.length-1){currentQ++;waitingForCode=false;renderQ()}}
+function requestNextCode(){waitingForCode=true;renderQ()}
+function showCodeGate(err){
+  var nextIdx=currentQ+1;
+  var h='<div class="hdr"><h1>Live<span>Poll</span></h1><p>'+D.title+'</p></div>';
+  h+='<div class="card"><div class="code-gate">';
+  h+='<div style="font-size:36px;margin-bottom:12px">\uD83C\uDFAF</div>';
+  h+='<h3 style="font-size:18px;margin-bottom:6px">Ready for Question '+(nextIdx+1)+'?</h3>';
+  h+='<p>Ask your presenter for the next session code.</p>';
+  h+='<div class="gap"></div>';
+  h+='<input id="inp-qcode" class="inp inp-code" placeholder="______" maxlength="6" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key===\'Enter\')submitQCode()">';
+  if(err)h+='<div class="err" style="margin-top:8px">'+err+'</div>';
+  h+='<div class="gap"></div>';
+  h+='<button class="btn btn-pu" onclick="submitQCode()">Continue \u2192</button>';
+  h+='</div></div>';
+  h+='<div class="dots">';D.questions.forEach(function(_,i){var done=voted[i]!==undefined;var active=i===currentQ;
+    h+='<div class="dot" style="width:'+(active?'24px':'8px')+';background:'+(done?'var(--gn)':active?'var(--ac)':'var(--bd)')+'"></div>';});h+='</div>';
+  document.getElementById("app").innerHTML=h;
+  setTimeout(function(){var el=document.getElementById("inp-qcode");if(el)el.focus()},100);
+}
+function submitQCode(){
+  var el=document.getElementById("inp-qcode");if(!el)return;
+  var code=el.value.trim().toUpperCase();
+  if(code.length<4){showCodeGate("Please enter a valid code.");return}
+  // questionCodes array is for Q2+ (index 0 = Q2's code, index 1 = Q3's code, etc.)
+  var expectedIdx=currentQ; // currentQ is still on the answered question, next is currentQ+1, code index = currentQ+1-1 = currentQ
+  var expected=D.questionCodes&&D.questionCodes[expectedIdx];
+  if(!expected||code!==expected){showCodeGate("Invalid code. Ask your presenter for the correct code.");return}
+  waitingForCode=false;currentQ++;renderQ();
+}
 function showSubmitting(){
   document.getElementById("app").innerHTML='<div class="hdr"><h1>Live<span>Poll</span></h1></div><div class="card" style="text-align:center;padding:36px"><div style="font-size:36px;margin-bottom:12px">\u2B06</div><div class="sts sts-wait">Submitting your votes...</div></div>';
   var vd={code:D.code,name:userName,pid:pid,votes:{},timestamp:new Date().toISOString()};
@@ -100,7 +139,6 @@ function showDone(submitted){
     h+='<div style="display:flex;align-items:center;gap:8px"><span class="badge" style="background:'+cl+';color:#fff;width:22px;height:22px;font-size:11px">'+String.fromCharCode(65+sel)+'</span><span style="font-size:13px">'+opt.text+'</span></div></div>';});
   h+='</div></div>';document.getElementById("app").innerHTML=h;
 }
-function copyVC(){var el=document.getElementById("vcode");if(!el)return;try{navigator.clipboard.writeText(el.textContent)}catch(e){var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy")}
-  var btn=el.nextElementSibling;if(btn){btn.textContent="\u2713 Copied!";setTimeout(function(){btn.textContent="Copy Vote Code"},2000)}}
+function copyVC(){var el=document.getElementById("vcode");if(!el)return;var t=el.textContent;if(navigator.clipboard)navigator.clipboard.writeText(t);else{var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta)}}
 showJoin();
 </script></body></html>
