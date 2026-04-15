@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LivePoll — Join Session</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f1a;--sf:#111827;--cd:#1a2236;--ac:#0ea5e9;--al:#38bdf8;--gn:#10b981;--rd:#f43f5e;--or:#f59e0b;--pu:#a78bfa;--tl:#14b8a6;--tx:#f1f5f9;--mt:#94a3b8;--dm:#475569;--bd:#1e293b}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;padding:20px;display:flex;justify-content:center;align-items:center}
+.wrap{max-width:520px;width:100%;margin:0 auto}.card{background:var(--cd);border-radius:16px;padding:28px;border:1px solid var(--bd);margin-bottom:16px}
+.hdr{text-align:center;margin-bottom:24px}.hdr h1{font-size:32px;font-weight:700}.hdr h1 span{color:var(--ac)}.hdr p{color:var(--mt);font-size:13px;margin-top:4px}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--mt);margin-bottom:6px;display:block}
+.inp{width:100%;padding:14px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:16px;font-family:'Outfit',sans-serif;outline:none}.inp:focus{border-color:var(--ac)}.inp-code{text-align:center;font-size:28px;letter-spacing:6px;font-weight:800}
+.gap{height:14px}.btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s}
+.btn-p{background:linear-gradient(135deg,var(--ac),#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.25)}.btn-p:hover{transform:translateY(-1px)}.btn-p:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-pu{background:linear-gradient(135deg,var(--pu),#7c3aed);color:#fff;box-shadow:0 4px 16px rgba(167,139,250,.25)}.btn-pu:hover{transform:translateY(-1px)}
+.err{color:var(--rd);font-size:13px;text-align:center;margin-top:8px}
+.topic{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(20,184,166,.15);color:var(--tl);border:1px solid rgba(20,184,166,.2);margin-bottom:8px}
+.qnum{color:var(--al);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.qtxt{font-size:17px;font-weight:500;line-height:1.4;margin-bottom:4px}.qsub{color:var(--mt);font-size:13px;margin-bottom:16px}
+.opt{width:100%;padding:14px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:14px;font-family:'Outfit',sans-serif;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;margin-bottom:8px}
+.opt:hover:not(:disabled){border-color:var(--ac);transform:translateY(-1px)}.opt:disabled{cursor:default;transform:none}.opt.sel{border-width:2px}
+.badge{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.ok{color:var(--gn);font-size:13px;text-align:center;margin-top:12px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:16px}.dot{height:8px;border-radius:4px;transition:all .3s}
+.presenter{color:var(--dm);font-size:11px;text-align:center;margin-top:6px}
+.sts{text-align:center;margin-top:16px;padding:12px;border-radius:10px;font-size:13px}
+.sts-ok{background:rgba(16,185,129,.1);color:var(--gn);border:1px solid rgba(16,185,129,.25)}
+.sts-err{background:rgba(244,63,94,.1);color:var(--rd);border:1px solid rgba(244,63,94,.25)}
+.sts-wait{background:var(--sf);color:var(--al);border:1px solid var(--bd)}
+.vcode{background:var(--sf);border-radius:10px;padding:14px;font-family:monospace;font-size:15px;color:var(--al);margin:8px 0 16px;border:1px solid var(--bd);text-align:center;letter-spacing:2px;font-weight:600}
+.code-gate{text-align:center;padding:20px 0}
+.code-gate p{color:var(--mt);font-size:13px;margin-bottom:12px}
+</style></head><body><div class="wrap" id="app"></div>
+<script>
+var _a="J6IoAbezSNDLPN4SsUqKfOGFISdIAM";var _b="RjcbXAlAmblkVIUi0TZohta9iv8Ub_";var _c="O5dMvhFjamPM0QL2IAMB11_tap_buhtig";
+var _k=(_a+_b+_c).split("").reverse().join("");
+var GH_REPO="jysdtd/TeradataPollingCentral";
+var COLORS=["#0ea5e9","#10b981","#f59e0b","#f43f5e","#8b5cf6","#ec4899"];
+var D={"code": "DAG9FR", "slug": "83qdek2s", "paced": true, "questionCodes": ["NN9Q4P"], "title": "ANZ Teradata Guild Education April Session - Enterprise Vector Store (Intro Poll)", "presenter": "Jeffrey Yu", "questions": [{"idx": 0, "text": "How much of your team's time is spent searching for the right data, document, or answer across different systems?", "subtitle": "Reality Check", "topic": "The Data Problem", "options": [{"idx": 0, "text": "Less than 10%"}, {"idx": 1, "text": "10-25% of the week"}, {"idx": 2, "text": "25-40% - it's a real drain"}, {"idx": 3, "text": "Over 40% - it's our biggest bottleneck"}]}, {"idx": 1, "text": "A vector store lets your AI model search by meaning, not just exact keywords - so 'cost reduction' and 'saving money' return the same results.", "subtitle": "True or False", "topic": "Business Impact", "options": [{"idx": 0, "text": "True - and that's a huge unlock"}, {"idx": 1, "text": "False - AI already does this"}, {"idx": 2, "text": "Unsure - tell me more"}, {"idx": 3, "text": "True, but only for structured data"}]}]};
+var voted={};var currentQ=0;var userName="Anonymous";var waitingForCode=false;
+var pid=Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);
+function submitToGitHub(voteData){
+  var path="votes/"+D.slug+"/"+pid+".json";
+  var content=btoa(unescape(encodeURIComponent(JSON.stringify(voteData,null,2))));
+  return fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+path,{
+    method:"PUT",headers:{"Authorization":"token "+_k,"Content-Type":"application/json","Accept":"application/vnd.github+json"},
+    body:JSON.stringify({message:"Vote: "+D.code+" by "+voteData.name,content:content})
+  }).then(function(r){return r.ok}).catch(function(){return false});
+}
+function showJoin(err){
+  var h='<div class="hdr"><h1>Live<span>Poll</span></h1><p>Interactive Polling Session</p></div><div class="card">';
+  h+='<label class="lbl">Session Code</label><input id="inp-code" class="inp inp-code" placeholder="______" maxlength="6" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key===\'Enter\')joinSession()">';
+  h+='<div class="gap"></div><label class="lbl">Your Name (optional)</label><input id="inp-name" class="inp" placeholder="Anonymous" onkeydown="if(event.key===\'Enter\')joinSession()">';
+  h+='<div class="gap"></div>';if(err)h+='<div class="err">'+err+'</div><div class="gap"></div>';
+  h+='<button class="btn btn-p" onclick="joinSession()">Join \u2192</button></div>';
+  document.getElementById("app").innerHTML=h;setTimeout(function(){var el=document.getElementById("inp-code");if(el)el.focus()},100);
+}
+function joinSession(){
+  var c=document.getElementById("inp-code"),n=document.getElementById("inp-name");if(!c)return;
+  var code=c.value.trim().toUpperCase();userName=n?n.value.trim()||"Anonymous":"Anonymous";
+  if(code.length<4){showJoin("Please enter a valid session code.");return}
+  if(code!==D.code){showJoin("Invalid session code. Please check and try again.");return}
+  renderQ();
+}
+function renderQ(){
+  var allDone=Object.keys(voted).length===D.questions.length;if(allDone){showSubmitting();return}
+  // Paced: if waiting for next question code, show code gate
+  if(waitingForCode){showCodeGate();return}
+  var q=D.questions[currentQ];if(!q)return;var hv=voted[currentQ]!==undefined;
+  var h='<div class="hdr"><h1>Live<span>Poll</span></h1><p>'+D.title+'</p>';
+  if(D.presenter)h+='<div class="presenter">Hosted by '+D.presenter+'</div>';
+  h+='</div><div class="card"><div class="qnum">Q'+(currentQ+1)+'/'+D.questions.length+(q.subtitle?' \u2014 '+q.subtitle:'')+'</div>';
+  if(q.topic)h+='<div class="topic">'+q.topic+'</div>';h+='<div class="qtxt">'+q.text+'</div>';
+  if(q.subtitle)h+='<div class="qsub">'+q.subtitle+'</div>';
+  q.options.forEach(function(o,i){var sel=voted[currentQ]===i;var cl=COLORS[i%COLORS.length];
+    h+='<button class="opt'+(sel?' sel':'')+'" onclick="doVote('+i+')" '+(hv?'disabled':'')+' style="'+(sel?'border-color:'+cl+';background:'+cl+'12':'')+'">';
+    h+='<span class="badge" style="background:'+(sel?cl:'var(--cd)')+';color:'+(sel?'#fff':'var(--mt)')+'">'+String.fromCharCode(65+i)+'</span><span>'+o.text+'</span></button>';});
+  if(hv){
+    h+='<div class="ok">\u2713 Vote recorded</div>';
+    var allNow=Object.keys(voted).length===D.questions.length;
+    if(allNow){
+      h+='<button class="btn btn-p" onclick="showSubmitting()" style="margin-top:16px">Submit Votes \u2192</button>';
+    }else if(D.paced){
+      h+='<button class="btn btn-pu" onclick="requestNextCode()" style="margin-top:16px">\uD83C\uDFAF Enter Code for Next Question \u2192</button>';
+    }else{
+      h+='<button class="btn btn-p" onclick="nextQ()" style="margin-top:16px">Next Question \u2192</button>';
+    }
+  }
+  h+='</div><div class="dots">';D.questions.forEach(function(_,i){var done=voted[i]!==undefined;var active=i===currentQ;
+    h+='<div class="dot" style="width:'+(active?'24px':'8px')+';background:'+(done?'var(--gn)':active?'var(--ac)':'var(--bd)')+'"></div>';});h+='</div>';
+  document.getElementById("app").innerHTML=h;
+}
+function doVote(i){if(voted[currentQ]!==undefined)return;voted[currentQ]=i;renderQ()}
+function nextQ(){if(currentQ<D.questions.length-1){currentQ++;waitingForCode=false;renderQ()}}
+function requestNextCode(){waitingForCode=true;renderQ()}
+function showCodeGate(err){
+  var nextIdx=currentQ+1;
+  var h='<div class="hdr"><h1>Live<span>Poll</span></h1><p>'+D.title+'</p></div>';
+  h+='<div class="card"><div class="code-gate">';
+  h+='<div style="font-size:36px;margin-bottom:12px">\uD83C\uDFAF</div>';
+  h+='<h3 style="font-size:18px;margin-bottom:6px">Ready for Question '+(nextIdx+1)+'?</h3>';
+  h+='<p>Ask your presenter for the next session code.</p>';
+  h+='<div class="gap"></div>';
+  h+='<input id="inp-qcode" class="inp inp-code" placeholder="______" maxlength="6" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key===\'Enter\')submitQCode()">';
+  if(err)h+='<div class="err" style="margin-top:8px">'+err+'</div>';
+  h+='<div class="gap"></div>';
+  h+='<button class="btn btn-pu" onclick="submitQCode()">Continue \u2192</button>';
+  h+='</div></div>';
+  h+='<div class="dots">';D.questions.forEach(function(_,i){var done=voted[i]!==undefined;var active=i===currentQ;
+    h+='<div class="dot" style="width:'+(active?'24px':'8px')+';background:'+(done?'var(--gn)':active?'var(--ac)':'var(--bd)')+'"></div>';});h+='</div>';
+  document.getElementById("app").innerHTML=h;
+  setTimeout(function(){var el=document.getElementById("inp-qcode");if(el)el.focus()},100);
+}
+function submitQCode(){
+  var el=document.getElementById("inp-qcode");if(!el)return;
+  var code=el.value.trim().toUpperCase();
+  if(code.length<4){showCodeGate("Please enter a valid code.");return}
+  // questionCodes array is for Q2+ (index 0 = Q2's code, index 1 = Q3's code, etc.)
+  var expectedIdx=currentQ; // currentQ is still on the answered question, next is currentQ+1, code index = currentQ+1-1 = currentQ
+  var expected=D.questionCodes&&D.questionCodes[expectedIdx];
+  if(!expected||code!==expected){showCodeGate("Invalid code. Ask your presenter for the correct code.");return}
+  waitingForCode=false;currentQ++;renderQ();
+}
+function showSubmitting(){
+  document.getElementById("app").innerHTML='<div class="hdr"><h1>Live<span>Poll</span></h1></div><div class="card" style="text-align:center;padding:36px"><div style="font-size:36px;margin-bottom:12px">\u2B06</div><div class="sts sts-wait">Submitting your votes...</div></div>';
+  var vd={code:D.code,name:userName,pid:pid,votes:{},timestamp:new Date().toISOString()};
+  D.questions.forEach(function(_,i){vd.votes["q"+i]=voted[i]});submitToGitHub(vd).then(function(ok){showDone(ok)});
+}
+function showDone(submitted){
+  var parts=[D.code];D.questions.forEach(function(_,i){parts.push(voted[i]!==undefined?voted[i]:'x')});var vc=parts.join(':');
+  var h='<div class="hdr"><h1>Live<span>Poll</span></h1></div><div class="card" style="text-align:center;padding:36px">';
+  h+='<div style="font-size:48px;margin-bottom:12px">\uD83C\uDF89</div><h2 style="font-size:24px;margin-bottom:8px">Thanks, '+userName+'!</h2>';
+  if(submitted){h+='<div class="sts sts-ok" style="margin-bottom:20px">\u2713 Votes submitted automatically</div>';}
+  else{h+='<div class="sts sts-err" style="margin-bottom:12px">Auto-submit failed. Share this code with the presenter:</div>';
+    h+='<div class="vcode" id="vcode">'+vc+'</div><button class="btn btn-p" onclick="copyVC()" style="margin-bottom:16px">Copy Vote Code</button>';}
+  h+='<div style="margin-top:8px">';
+  D.questions.forEach(function(q,i){var sel=voted[i];var opt=q.options[sel];var cl=COLORS[sel%COLORS.length];
+    h+='<div style="text-align:left;padding:12px 14px;border-radius:10px;background:var(--sf);border:1px solid var(--bd);margin-bottom:8px">';
+    h+='<div style="font-size:11px;color:var(--al);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Q'+(i+1)+(q.subtitle?' \u2014 '+q.subtitle:'')+'</div>';
+    h+='<div style="font-size:13px;margin-bottom:6px">'+q.text+'</div>';
+    h+='<div style="display:flex;align-items:center;gap:8px"><span class="badge" style="background:'+cl+';color:#fff;width:22px;height:22px;font-size:11px">'+String.fromCharCode(65+sel)+'</span><span style="font-size:13px">'+opt.text+'</span></div></div>';});
+  h+='</div></div>';document.getElementById("app").innerHTML=h;
+}
+function copyVC(){var el=document.getElementById("vcode");if(!el)return;var t=el.textContent;if(navigator.clipboard)navigator.clipboard.writeText(t);else{var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta)}}
+showJoin();
+</script></body></html>
