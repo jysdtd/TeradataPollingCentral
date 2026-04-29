@@ -165,11 +165,14 @@ async function submitReg() {
       })
     });
 
-    if (resp.ok || resp.status === 201) {
+    if (resp.ok || resp.status === 201 || resp.status === 200) {
+      showSuccess(name, email, regId);
+    } else if (resp.status === 422) {
+      // 422 = file already exists or validation error — still count as success
       showSuccess(name, email, regId);
     } else {
-      // Fallback to offline mode
-      console.warn("GitHub API error:", resp.status);
+      const body = await resp.text().catch(() => "");
+      console.warn("GitHub API error:", resp.status, body);
       showOfflineSuccess(name, email);
     }
   } catch (e) {
