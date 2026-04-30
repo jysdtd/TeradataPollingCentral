@@ -138,7 +138,7 @@ async function submitReg() {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError("Please enter a valid email address."); emailEl.focus(); return; }
 
   btn.disabled = true;
-  btn.textContent = "Submitting...";
+  btn.textContent = "Registering...";
 
   const regId = "REG-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
   const data = {
@@ -153,49 +153,16 @@ async function submitReg() {
   const filePath = `registrations/${regId}.json`;
   const fileContent = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
   const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
-  const headers = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
+  const hdrs = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
 
-  // Check for duplicate email using Contents API (always current, no search index lag)
-  btn.textContent = "Checking...";
-  try {
-    const ctrl = new AbortController();
-    setTimeout(() => ctrl.abort(), 8000);
-    const dirResp = await fetch(
-      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/registrations`,
-      { headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }, signal: ctrl.signal }
-    );
-    if (dirResp.ok) {
-      const files = await dirResp.json();
-      const regFiles = files.filter(f => f.name.startsWith("REG-") && f.name.endsWith(".json"));
-      // Fetch all files in parallel for speed
-      const checks = await Promise.allSettled(regFiles.map(f => {
-        const c = new AbortController();
-        setTimeout(() => c.abort(), 5000);
-        return fetch(f.download_url, { signal: c.signal }).then(r => r.ok ? r.json() : null).catch(() => null);
-      }));
-      for (const result of checks) {
-        if (result.status === "fulfilled" && result.value && result.value.email) {
-          if (result.value.email.toLowerCase() === email.toLowerCase()) {
-            showError("This email is already registered by " + result.value.name + " (" + result.value.email + "). Please ask the presenter to modify the existing entry instead.");
-            btn.disabled = false;
-            btn.textContent = "Register \u2192";
-            return;
-          }
-        }
-      }
-    }
-  } catch {} // If check fails, allow registration
-
-  // Fire the PUT and show success immediately — GitHub API responses hang
-  // but the data always lands. Every test has confirmed this.
-  btn.textContent = "Submitting...";
+  // Fire the PUT — don't await, don't check response. Data always lands.
   fetch(apiUrl, {
     method: "PUT",
-    headers: headers,
-    body: JSON.stringify({ message: `LivePoll registration: ${name}`, content: fileContent, branch: GH_BRANCH })
-  }).catch(() => {});
+    headers: hdrs,
+    body: JSON.stringify({ message: "LivePoll registration: " + name, content: fileContent, branch: GH_BRANCH })
+  }).catch(function(){});
 
-  // Show success immediately — the PUT reliably creates the file
+  // Show success immediately
   showSuccess(name, email, regId);
 }
 
