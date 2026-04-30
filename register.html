@@ -148,61 +148,34 @@ async function submitReg() {
   };
 
   const filePath = `registrations/${regId}.json`;
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const fileContent = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
+  const headers = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
 
-  // Fetch with timeout to prevent hanging
-  async function fetchWithTimeout(url, opts, ms) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    try { const r = await fetch(url, { ...opts, signal: ctrl.signal }); clearTimeout(timer); return r; }
-    catch (e) { clearTimeout(timer); throw e; }
+  // Fire the PUT without awaiting — don't wait for GitHub's slow response
+  fetch(apiUrl, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify({ message: `LivePoll registration: ${name}`, content: fileContent, branch: GH_BRANCH })
+  }).catch(() => {}); // Ignore — we'll verify below
+
+  // Immediately start polling to confirm the file was created
+  btn.textContent = "Verifying...";
+  let verified = false;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    await new Promise(r => setTimeout(r, 2000)); // Wait 2s between checks
+    btn.textContent = "Verifying" + ".".repeat((attempt % 3) + 1);
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 5000);
+      const check = await fetch(apiUrl, { headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }, signal: ctrl.signal });
+      clearTimeout(timer);
+      if (check.ok || check.status === 200) { verified = true; break; }
+    } catch {}
   }
 
-  try {
-    const resp = await fetchWithTimeout(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
-      method: "PUT",
-      headers: {
-        "Authorization": "token " + gt(),
-        "Content-Type": "application/json",
-        "Accept": "application/vnd.github.v3+json"
-      },
-      body: JSON.stringify({
-        message: `LivePoll registration: ${name}`,
-        content: content,
-        branch: GH_BRANCH
-      })
-    }, 15000);
-
-    if (resp.ok || resp.status === 201 || resp.status === 200 || resp.status === 422) {
-      showSuccess(name, email, regId);
-    } else {
-      btn.textContent = "Verifying...";
-      const verified = await verifyRegistration(filePath);
-      if (verified) { showSuccess(name, email, regId); }
-      else { console.warn("GitHub API error:", resp.status); showOfflineSuccess(name, email); }
-    }
-  } catch (e) {
-    // Timed out or network error — PUT may have still succeeded
-    console.warn("Request error, verifying:", e.name, e.message);
-    btn.textContent = "Verifying...";
-    await new Promise(r => setTimeout(r, 3000));
-    const verified = await verifyRegistration(filePath);
-    if (verified) { showSuccess(name, email, regId); }
-    else { showOfflineSuccess(name, email); }
-  }
-}
-
-async function verifyRegistration(filePath) {
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 10000);
-    const check = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
-      headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" },
-      signal: ctrl.signal
-    });
-    clearTimeout(timer);
-    return check.ok || check.status === 200;
-  } catch { return false; }
+  if (verified) { showSuccess(name, email, regId); }
+  else { showOfflineSuccess(name, email); }
 }
 
 render();
