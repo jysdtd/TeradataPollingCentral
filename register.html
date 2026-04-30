@@ -152,39 +152,36 @@ async function submitReg() {
   const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
   const headers = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
 
-  // Check for duplicate email — single search query, no latency
+  // Check for duplicate email using Contents API (always current, no search index lag)
   btn.textContent = "Checking...";
   try {
     const ctrl = new AbortController();
-    setTimeout(() => ctrl.abort(), 5000);
-    const searchResp = await fetch(
-      `https://api.github.com/search/code?q=${encodeURIComponent('"' + email.toLowerCase() + '"')}+in:file+path:registrations+repo:${GH_OWNER}/${GH_REPO}`,
+    setTimeout(() => ctrl.abort(), 8000);
+    const dirResp = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/registrations`,
       { headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }, signal: ctrl.signal }
     );
-    if (searchResp.ok) {
-      const results = await searchResp.json();
-      if (results.total_count > 0) {
-        // Found a match — fetch the file to get the existing name
-        let existingName = "another participant";
-        try {
-          const ctrl2 = new AbortController();
-          setTimeout(() => ctrl2.abort(), 3000);
-          const fResp = await fetch(results.items[0].url, {
-            headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }, signal: ctrl2.signal
-          });
-          if (fResp.ok) {
-            const fData = await fResp.json();
-            const decoded = JSON.parse(decodeURIComponent(escape(atob(fData.content.replace(/\n/g, "")))));
-            existingName = decoded.name || existingName;
+    if (dirResp.ok) {
+      const files = await dirResp.json();
+      const regFiles = files.filter(f => f.name.startsWith("REG-") && f.name.endsWith(".json"));
+      // Fetch all files in parallel for speed
+      const checks = await Promise.allSettled(regFiles.map(f => {
+        const c = new AbortController();
+        setTimeout(() => c.abort(), 5000);
+        return fetch(f.download_url, { signal: c.signal }).then(r => r.ok ? r.json() : null).catch(() => null);
+      }));
+      for (const result of checks) {
+        if (result.status === "fulfilled" && result.value && result.value.email) {
+          if (result.value.email.toLowerCase() === email.toLowerCase()) {
+            showError("This email is already registered by " + result.value.name + " (" + result.value.email + "). Please ask the presenter to modify the existing entry instead.");
+            btn.disabled = false;
+            btn.textContent = "Register \u2192";
+            return;
           }
-        } catch {}
-        showError("This email is already registered by " + existingName + " (" + email + "). Please ask the presenter to modify the existing entry instead.");
-        btn.disabled = false;
-        btn.textContent = "Register \u2192";
-        return;
+        }
       }
     }
-  } catch {} // If search fails, allow registration — better than blocking
+  } catch {} // If check fails, allow registration
 
   // Fire the PUT and show success immediately — GitHub API responses hang
   // but the data always lands. Every test has confirmed this.
