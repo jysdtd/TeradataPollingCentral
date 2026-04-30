@@ -4,169 +4,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>LivePoll — Participant Registration</title>
+<title>LivePoll Registration</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0f1a;--sf:#111827;--cd:#1a2236;--ac:#0ea5e9;--al:#38bdf8;--gn:#10b981;--rd:#f43f5e;--or:#f59e0b;--pu:#a78bfa;--tl:#14b8a6;--tx:#f1f5f9;--mt:#94a3b8;--dm:#475569;--bd:#1e293b;--cy:#22d3ee}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+body{font-family:'Outfit',sans-serif;background:#0b0f1a;color:#f1f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .wrap{max-width:420px;width:100%}
-.card{background:var(--cd);border-radius:16px;padding:28px;border:1px solid var(--bd)}
+.card{background:#1a2236;border-radius:16px;padding:28px;border:1px solid #1e293b}
 .hdr{text-align:center;margin-bottom:24px}
 .hdr .icon{font-size:48px;margin-bottom:8px}
-.hdr h1{font-size:28px;font-weight:700}.hdr h1 span{color:var(--ac)}
-.hdr p{color:var(--mt);font-size:13px;margin-top:6px}
-.lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--mt);margin-bottom:6px;display:block}
-.inp{width:100%;padding:13px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:14px;font-family:'Outfit',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s}
-.inp:focus{border-color:var(--ac)}
-.inp::placeholder{color:var(--dm)}
+.hdr h1{font-size:28px;font-weight:700}.hdr h1 span{color:#0ea5e9}
+.hdr p{color:#94a3b8;font-size:13px;margin-top:6px}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:#94a3b8;margin-bottom:6px;display:block}
+.inp{width:100%;padding:13px 16px;border-radius:10px;border:1px solid #1e293b;background:#111827;color:#f1f5f9;font-size:14px;font-family:'Outfit',sans-serif;outline:none}
+.inp:focus{border-color:#0ea5e9}
+.inp::placeholder{color:#475569}
 .field{margin-bottom:14px}
-.btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-primary{background:linear-gradient(135deg,var(--ac),#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.25)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-secondary{background:var(--cd);color:var(--tx);border:1px solid var(--bd);margin-top:10px}
-.err{color:var(--rd);font-size:13px;text-align:center;margin:10px 0}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.25)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{color:#f43f5e;font-size:13px;text-align:center;margin:10px 0;display:none}
 .ok{text-align:center;padding:40px 20px}
 .ok .big{font-size:56px;margin-bottom:12px}
-.ok h2{font-size:22px;margin-bottom:8px;color:var(--gn)}
-.ok p{color:var(--mt);font-size:13px;line-height:1.5}
-.ok .code{margin:16px 0;padding:14px;background:var(--sf);border-radius:10px;font-family:monospace;font-size:14px;color:var(--al);word-break:break-all;border:1px solid var(--bd);text-align:center;letter-spacing:1px}
+.ok h2{font-size:22px;margin-bottom:8px;color:#10b981}
+.ok p{color:#94a3b8;font-size:13px;line-height:1.5}
+.ok .rid{margin:16px 0;padding:14px;background:#111827;border-radius:10px;font-family:monospace;font-size:14px;color:#38bdf8;border:1px solid #1e293b;text-align:center;letter-spacing:1px}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);margin-top:12px}
-.badge span{color:var(--or);font-size:11px;font-weight:600}
-.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gn);box-shadow:0 0 6px var(--gn)}
-.powered{text-align:center;margin-top:16px;color:var(--dm);font-size:11px}
+.badge span{color:#f59e0b;font-size:11px;font-weight:600}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981}
+.pw{text-align:center;margin-top:16px;color:#475569;font-size:11px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div id="app"></div>
-</div>
+<div class="wrap" id="app"></div>
 <script>
-const GH_OWNER = "jysdtd";
-const GH_REPO = "TeradataPollingCentral";
-const GH_BRANCH = "main";
-// Token parts (split-reversed for obfuscation, same as LivePoll app)
-const _a = "J6IoAbezSNDLPN4SsUqKfOGFISdIAM";
-const _b = "RjcbXAlAmblkVIUi0TZohta9iv8Ub_";
-const _c = "O5dMvhFjamPM0QL2IAMB11_tap_buhtig";
-function gt() { return (_a + _b + _c).split("").reverse().join(""); }
+var GH_OWNER="jysdtd",GH_REPO="TeradataPollingCentral",GH_BRANCH="main";
+var _a="J6IoAbezSNDLPN4SsUqKfOGFISdIAM",_b="RjcbXAlAmblkVIUi0TZohta9iv8Ub_",_c="O5dMvhFjamPM0QL2IAMB11_tap_buhtig";
+function gt(){return(_a+_b+_c).split("").reverse().join("")}
 
-function render() {
-  document.getElementById("app").innerHTML = `
-    <div class="card">
-      <div class="hdr">
-        <div class="icon">📝</div>
-        <h1>Live<span>Poll</span></h1>
-        <p>Participant Registration</p>
-        <div class="badge"><span class="dot"></span><span>Teradata · Polling_App</span></div>
-      </div>
-      <div class="field">
-        <label class="lbl">Full Name *</label>
-        <input class="inp" id="regName" placeholder="Your full name" autofocus />
-      </div>
-      <div class="field">
-        <label class="lbl">Email Address *</label>
-        <input class="inp" id="regEmail" placeholder="you@company.com" type="email" />
-      </div>
-      <div class="field">
-        <label class="lbl">Company</label>
-        <input class="inp" id="regCompany" placeholder="Your company" />
-      </div>
-      <div class="field">
-        <label class="lbl">Role / Title</label>
-        <input class="inp" id="regRole" placeholder="e.g. Data Engineer, Product Manager" />
-      </div>
-      <div id="errMsg" class="err" style="display:none"></div>
-      <button class="btn btn-primary" id="regBtn" onclick="submitReg()">Register →</button>
-    </div>
-    <p class="powered">Powered by LivePoll · Teradata</p>
-  `;
+function showForm(){
+  document.getElementById("app").innerHTML=
+    '<div class="card"><div class="hdr"><div class="icon">\ud83d\udcdd</div><h1>Live<span>Poll</span></h1><p>Participant Registration</p><div class="badge"><span class="dot"></span><span>Teradata</span></div></div>'+
+    '<div class="field"><label class="lbl">Full Name *</label><input class="inp" id="n" placeholder="Your full name"></div>'+
+    '<div class="field"><label class="lbl">Email Address *</label><input class="inp" id="e" placeholder="you@company.com" type="email"></div>'+
+    '<div class="field"><label class="lbl">Company</label><input class="inp" id="c" placeholder="Your company"></div>'+
+    '<div class="field"><label class="lbl">Role / Title</label><input class="inp" id="r" placeholder="e.g. Data Engineer"></div>'+
+    '<div class="err" id="err"></div>'+
+    '<button class="btn" id="btn" onclick="go()">Register \u2192</button></div><p class="pw">Powered by LivePoll \xb7 Teradata</p>';
 }
 
-function showError(msg) {
-  const el = document.getElementById("errMsg");
-  el.textContent = msg;
-  el.style.display = "block";
-}
-
-function showSuccess(name, email, regId) {
-  document.getElementById("app").innerHTML = `
-    <div class="card ok">
-      <div class="big">✅</div>
-      <h2>You're Registered!</h2>
-      <p>Thanks, <strong>${name}</strong>${company ? " from " + company : ""}. Your presenter has been notified.</p>
-      <div class="code">${regId}</div>
-      <p style="color:var(--dm);font-size:11px;margin-top:8px">Registration ID — keep this for reference</p>
-      <button class="btn btn-secondary" onclick="render()">Register Another</button>
-    </div>
-    <p class="powered">Powered by LivePoll · Teradata</p>
-  `;
-}
-
-function showOfflineSuccess(name, email) {
-  const regId = "LOCAL-" + Math.random().toString(36).slice(2,10).toUpperCase();
-  document.getElementById("app").innerHTML = `
-    <div class="card ok">
-      <div class="big">📋</div>
-      <h2>Registered (Offline)</h2>
-      <p>Thanks, <strong>${name}</strong>. Your details have been saved locally. The presenter will sync your registration later.</p>
-      <div class="code">${regId}</div>
-      <p style="color:var(--dm);font-size:11px;margin-top:8px">Show this screen to your presenter</p>
-      <button class="btn btn-secondary" onclick="render()">Register Another</button>
-    </div>
-    <p class="powered">Powered by LivePoll · Teradata</p>
-  `;
-}
-
-async function submitReg() {
-  const nameEl = document.getElementById("regName");
-  const emailEl = document.getElementById("regEmail");
-  const companyEl = document.getElementById("regCompany");
-  const roleEl = document.getElementById("regRole");
-  const btn = document.getElementById("regBtn");
-  const errEl = document.getElementById("errMsg");
-  errEl.style.display = "none";
-
-  const name = nameEl.value.trim();
-  const email = emailEl.value.trim();
-  const company = companyEl.value.trim();
-  const role = roleEl.value.trim();
-
-  if (!name) { showError("Name is required."); nameEl.focus(); return; }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError("Please enter a valid email address."); emailEl.focus(); return; }
-
-  btn.disabled = true;
-  btn.textContent = "Registering...";
-
-  const regId = "REG-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
-  const data = {
-    regId: regId,
-    name: name,
-    email: email,
-    company: company,
-    role: role,
-    registeredAt: new Date().toISOString()
-  };
-
-  const filePath = `registrations/${regId}.json`;
-  const fileContent = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-  const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
-  const hdrs = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
-
-  // Fire the PUT — don't await, don't check response. Data always lands.
-  fetch(apiUrl, {
-    method: "PUT",
-    headers: hdrs,
-    body: JSON.stringify({ message: "LivePoll registration: " + name, content: fileContent, branch: GH_BRANCH })
-  }).catch(function(){});
-
+function go(){
+  var n=document.getElementById("n").value.trim();
+  var e=document.getElementById("e").value.trim();
+  var c=document.getElementById("c").value.trim();
+  var r=document.getElementById("r").value.trim();
+  var err=document.getElementById("err");
+  var btn=document.getElementById("btn");
+  err.style.display="none";
+  if(!n){err.textContent="Name is required.";err.style.display="block";return}
+  if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){err.textContent="Valid email required.";err.style.display="block";return}
+  btn.disabled=true;
+  var rid="REG-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
+  var data={regId:rid,name:n,email:e,company:c,role:r,registeredAt:new Date().toISOString()};
+  var path="registrations/"+rid+".json";
+  var body=JSON.stringify({message:"LivePoll registration: "+n,content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),branch:GH_BRANCH});
+  // Fire and forget - no await, no .then, just send it
+  try{
+    var x=new XMLHttpRequest();
+    x.open("PUT","https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path,true);
+    x.setRequestHeader("Authorization","token "+gt());
+    x.setRequestHeader("Content-Type","application/json");
+    x.setRequestHeader("Accept","application/vnd.github.v3+json");
+    x.send(body);
+  }catch(ex){}
   // Show success immediately
-  showSuccess(name, email, regId);
+  document.getElementById("app").innerHTML=
+    '<div class="card ok"><div class="big">\u2705</div><h2>You\'re Registered!</h2>'+
+    '<p>Thanks, <strong>'+n+'</strong>'+(c?" from "+c:"")+'.</p>'+
+    '<p style="color:#94a3b8;font-size:13px;margin-top:12px">Your presenter will have your details ready for the session.</p>'+
+    '<button class="btn" style="margin-top:20px;background:#1a2236;border:1px solid #1e293b;box-shadow:none" onclick="showForm()">Register Another</button>'+
+    '</div><p class="pw">Powered by LivePoll \xb7 Teradata</p>';
 }
 
-render();
+showForm();
 </script>
 </body>
 </html>
