@@ -165,20 +165,32 @@ async function submitReg() {
       })
     });
 
-    if (resp.ok || resp.status === 201 || resp.status === 200) {
-      showSuccess(name, email, regId);
-    } else if (resp.status === 422) {
-      // 422 = file already exists or validation error — still count as success
+    if (resp.ok || resp.status === 201 || resp.status === 200 || resp.status === 422) {
       showSuccess(name, email, regId);
     } else {
-      const body = await resp.text().catch(() => "");
-      console.warn("GitHub API error:", resp.status, body);
-      showOfflineSuccess(name, email);
+      // PUT returned an error — verify if file was actually created
+      const verified = await verifyRegistration(filePath);
+      if (verified) { showSuccess(name, email, regId); }
+      else { console.warn("GitHub API error:", resp.status); showOfflineSuccess(name, email); }
     }
   } catch (e) {
-    console.warn("Network error, using offline mode:", e);
-    showOfflineSuccess(name, email);
+    // Network error — the PUT may have still succeeded on GitHub's side
+    // Wait briefly then verify
+    console.warn("Network error, verifying:", e);
+    await new Promise(r => setTimeout(r, 2000));
+    const verified = await verifyRegistration(filePath);
+    if (verified) { showSuccess(name, email, regId); }
+    else { showOfflineSuccess(name, email); }
   }
+}
+
+async function verifyRegistration(filePath) {
+  try {
+    const check = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
+      headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }
+    });
+    return check.ok || check.status === 200;
+  } catch { return false; }
 }
 
 render();
