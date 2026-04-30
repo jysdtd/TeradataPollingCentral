@@ -152,8 +152,40 @@ async function submitReg() {
   const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
   const headers = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
 
+  // Check for duplicate email in existing registrations
+  btn.textContent = "Checking...";
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 8000);
+    const listResp = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/registrations`, {
+      headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" },
+      signal: ctrl.signal
+    });
+    if (listResp.ok) {
+      const files = await listResp.json();
+      for (const file of files) {
+        if (!file.name.startsWith("REG-") || !file.name.endsWith(".json")) continue;
+        try {
+          const ctrl2 = new AbortController();
+          setTimeout(() => ctrl2.abort(), 5000);
+          const fResp = await fetch(file.download_url, { signal: ctrl2.signal });
+          if (fResp.ok) {
+            const existing = await fResp.json();
+            if (existing.email && existing.email.toLowerCase() === email.toLowerCase()) {
+              showError("This email is already registered by " + existing.name + " (" + existing.email + "). Please ask the presenter to modify the existing entry instead.");
+              btn.disabled = false;
+              btn.textContent = "Register \u2192";
+              return;
+            }
+          }
+        } catch {}
+      }
+    }
+  } catch {}
+
   // Fire the PUT and show success immediately — GitHub API responses hang
   // but the data always lands. Every test has confirmed this.
+  btn.textContent = "Submitting...";
   fetch(apiUrl, {
     method: "PUT",
     headers: headers,
