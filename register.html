@@ -150,8 +150,16 @@ async function submitReg() {
   const filePath = `registrations/${regId}.json`;
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
 
+  // Fetch with timeout to prevent hanging
+  async function fetchWithTimeout(url, opts, ms) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    try { const r = await fetch(url, { ...opts, signal: ctrl.signal }); clearTimeout(timer); return r; }
+    catch (e) { clearTimeout(timer); throw e; }
+  }
+
   try {
-    const resp = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
+    const resp = await fetchWithTimeout(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
       method: "PUT",
       headers: {
         "Authorization": "token " + gt(),
@@ -163,21 +171,21 @@ async function submitReg() {
         content: content,
         branch: GH_BRANCH
       })
-    });
+    }, 15000);
 
     if (resp.ok || resp.status === 201 || resp.status === 200 || resp.status === 422) {
       showSuccess(name, email, regId);
     } else {
-      // PUT returned an error — verify if file was actually created
+      btn.textContent = "Verifying...";
       const verified = await verifyRegistration(filePath);
       if (verified) { showSuccess(name, email, regId); }
       else { console.warn("GitHub API error:", resp.status); showOfflineSuccess(name, email); }
     }
   } catch (e) {
-    // Network error — the PUT may have still succeeded on GitHub's side
-    // Wait briefly then verify
-    console.warn("Network error, verifying:", e);
-    await new Promise(r => setTimeout(r, 2000));
+    // Timed out or network error — PUT may have still succeeded
+    console.warn("Request error, verifying:", e.name, e.message);
+    btn.textContent = "Verifying...";
+    await new Promise(r => setTimeout(r, 3000));
     const verified = await verifyRegistration(filePath);
     if (verified) { showSuccess(name, email, regId); }
     else { showOfflineSuccess(name, email); }
@@ -186,9 +194,13 @@ async function submitReg() {
 
 async function verifyRegistration(filePath) {
   try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
     const check = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`, {
-      headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }
+      headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" },
+      signal: ctrl.signal
     });
+    clearTimeout(timer);
     return check.ok || check.status === 200;
   } catch { return false; }
 }
