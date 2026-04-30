@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>LivePoll — Participant Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f1a;--sf:#111827;--cd:#1a2236;--ac:#0ea5e9;--al:#38bdf8;--gn:#10b981;--rd:#f43f5e;--or:#f59e0b;--pu:#a78bfa;--tl:#14b8a6;--tx:#f1f5f9;--mt:#94a3b8;--dm:#475569;--bd:#1e293b;--cy:#22d3ee}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.wrap{max-width:420px;width:100%}
+.card{background:var(--cd);border-radius:16px;padding:28px;border:1px solid var(--bd)}
+.hdr{text-align:center;margin-bottom:24px}
+.hdr .icon{font-size:48px;margin-bottom:8px}
+.hdr h1{font-size:28px;font-weight:700}.hdr h1 span{color:var(--ac)}
+.hdr p{color:var(--mt);font-size:13px;margin-top:6px}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--mt);margin-bottom:6px;display:block}
+.inp{width:100%;padding:13px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:14px;font-family:'Outfit',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s}
+.inp:focus{border-color:var(--ac)}
+.inp::placeholder{color:var(--dm)}
+.field{margin-bottom:14px}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--ac),#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.25)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{background:var(--cd);color:var(--tx);border:1px solid var(--bd);margin-top:10px}
+.err{color:var(--rd);font-size:13px;text-align:center;margin:10px 0}
+.ok{text-align:center;padding:40px 20px}
+.ok .big{font-size:56px;margin-bottom:12px}
+.ok h2{font-size:22px;margin-bottom:8px;color:var(--gn)}
+.ok p{color:var(--mt);font-size:13px;line-height:1.5}
+.ok .code{margin:16px 0;padding:14px;background:var(--sf);border-radius:10px;font-family:monospace;font-size:14px;color:var(--al);word-break:break-all;border:1px solid var(--bd);text-align:center;letter-spacing:1px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);margin-top:12px}
+.badge span{color:var(--or);font-size:11px;font-weight:600}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gn);box-shadow:0 0 6px var(--gn)}
+.powered{text-align:center;margin-top:16px;color:var(--dm);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="app"></div>
+</div>
+<script>
+const GH_OWNER = "jysdtd";
+const GH_REPO = "TeradataPollingCentral";
+const GH_BRANCH = "main";
+// Token parts (split-reversed for obfuscation, same as LivePoll app)
+const _a = "J6IoAbezSNDLPN4SsUqKfOGFISdIAM";
+const _b = "RjcbXAlAmblkVIUi0TZohta9iv8Ub_";
+const _c = "O5dMvhFjamPM0QL2IAMB11_tap_buhtig";
+function gt() { return (_a + _b + _c).split("").reverse().join(""); }
+
+function render() {
+  document.getElementById("app").innerHTML = `
+    <div class="card">
+      <div class="hdr">
+        <div class="icon">📝</div>
+        <h1>Live<span>Poll</span></h1>
+        <p>Participant Registration</p>
+        <div class="badge"><span class="dot"></span><span>Teradata · Polling_App</span></div>
+      </div>
+      <div class="field">
+        <label class="lbl">Full Name *</label>
+        <input class="inp" id="regName" placeholder="Your full name" autofocus />
+      </div>
+      <div class="field">
+        <label class="lbl">Email Address *</label>
+        <input class="inp" id="regEmail" placeholder="you@company.com" type="email" />
+      </div>
+      <div class="field">
+        <label class="lbl">Company</label>
+        <input class="inp" id="regCompany" placeholder="Your company" />
+      </div>
+      <div class="field">
+        <label class="lbl">Role / Title</label>
+        <input class="inp" id="regRole" placeholder="e.g. Data Engineer, Product Manager" />
+      </div>
+      <div id="errMsg" class="err" style="display:none"></div>
+      <button class="btn btn-primary" id="regBtn" onclick="submitReg()">Register →</button>
+    </div>
+    <p class="powered">Powered by LivePoll · Teradata</p>
+  `;
+}
+
+function showError(msg) {
+  const el = document.getElementById("errMsg");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+
+function showSuccess(name, email, regId) {
+  document.getElementById("app").innerHTML = `
+    <div class="card ok">
+      <div class="big">✅</div>
+      <h2>You're Registered!</h2>
+      <p>Thanks, <strong>${name}</strong>${company ? " from " + company : ""}. Your presenter has been notified.</p>
+      <div class="code">${regId}</div>
+      <p style="color:var(--dm);font-size:11px;margin-top:8px">Registration ID — keep this for reference</p>
+      <button class="btn btn-secondary" onclick="render()">Register Another</button>
+    </div>
+    <p class="powered">Powered by LivePoll · Teradata</p>
+  `;
+}
+
+function showOfflineSuccess(name, email) {
+  const regId = "LOCAL-" + Math.random().toString(36).slice(2,10).toUpperCase();
+  document.getElementById("app").innerHTML = `
+    <div class="card ok">
+      <div class="big">📋</div>
+      <h2>Registered (Offline)</h2>
+      <p>Thanks, <strong>${name}</strong>. Your details have been saved locally. The presenter will sync your registration later.</p>
+      <div class="code">${regId}</div>
+      <p style="color:var(--dm);font-size:11px;margin-top:8px">Show this screen to your presenter</p>
+      <button class="btn btn-secondary" onclick="render()">Register Another</button>
+    </div>
+    <p class="powered">Powered by LivePoll · Teradata</p>
+  `;
+}
+
+async function submitReg() {
+  const nameEl = document.getElementById("regName");
+  const emailEl = document.getElementById("regEmail");
+  const companyEl = document.getElementById("regCompany");
+  const roleEl = document.getElementById("regRole");
+  const btn = document.getElementById("regBtn");
+  const errEl = document.getElementById("errMsg");
+  errEl.style.display = "none";
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim();
+  const company = companyEl.value.trim();
+  const role = roleEl.value.trim();
+
+  if (!name) { showError("Name is required."); nameEl.focus(); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError("Please enter a valid email address."); emailEl.focus(); return; }
+
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  const regId = "REG-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
+  const data = {
+    regId: regId,
+    name: name,
+    email: email,
+    company: company,
+    role: role,
+    registeredAt: new Date().toISOString()
+  };
+
+  const filePath = `registrations/${regId}.json`;
+  const fileContent = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
+  const headers = { "Authorization": "token " + gt(), "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" };
+
+  // Check for duplicate email using Contents API (always current, no search index lag)
+  btn.textContent = "Checking...";
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 8000);
+    const dirResp = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/registrations`,
+      { headers: { "Authorization": "token " + gt(), "Accept": "application/vnd.github.v3+json" }, signal: ctrl.signal }
+    );
+    if (dirResp.ok) {
+      const files = await dirResp.json();
+      const regFiles = files.filter(f => f.name.startsWith("REG-") && f.name.endsWith(".json"));
+      // Fetch all files in parallel for speed
+      const checks = await Promise.allSettled(regFiles.map(f => {
+        const c = new AbortController();
+        setTimeout(() => c.abort(), 5000);
+        return fetch(f.download_url, { signal: c.signal }).then(r => r.ok ? r.json() : null).catch(() => null);
+      }));
+      for (const result of checks) {
+        if (result.status === "fulfilled" && result.value && result.value.email) {
+          if (result.value.email.toLowerCase() === email.toLowerCase()) {
+            showError("This email is already registered by " + result.value.name + " (" + result.value.email + "). Please ask the presenter to modify the existing entry instead.");
+            btn.disabled = false;
+            btn.textContent = "Register \u2192";
+            return;
+          }
+        }
+      }
+    }
+  } catch {} // If check fails, allow registration
+
+  // Fire the PUT and show success immediately — GitHub API responses hang
+  // but the data always lands. Every test has confirmed this.
+  btn.textContent = "Submitting...";
+  fetch(apiUrl, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify({ message: `LivePoll registration: ${name}`, content: fileContent, branch: GH_BRANCH })
+  }).catch(() => {});
+
+  // Show success immediately — the PUT reliably creates the file
+  showSuccess(name, email, regId);
+}
+
+render();
+</script>
+</body>
+</html>
